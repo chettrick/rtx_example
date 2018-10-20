@@ -49,7 +49,9 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void Error_Handler(void);
+#if 0 // XXX Not needed for STM32F4-Discovery board.
 static void MX_GPIO_Init(void);
+#endif
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -82,8 +84,10 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 
+#if 0 // XXX Not needed for STM32F4-Discovery board.
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+#endif
 
   /* USER CODE BEGIN 2 */
   LED_Initialize();                     /* LED Initialization                   */
@@ -126,16 +130,17 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
+  RCC_OscInitStruct.PLL.PLLM = 8; // XXX Previously 25.
   RCC_OscInitStruct.PLL.PLLN = 336;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
+  RCC_OscInitStruct.PLL.PLLQ = 7; // XXX Previously 4.
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
-
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+	
+  // XXX Previously included RCC_CLOCKTYPE_HCLK.
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_SYSCLK 
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
@@ -146,14 +151,17 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
+#if 0 // XXX Not needed for STM32F4-Discovery board.
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
+#endif
 }
 
+#if 0 // XXX Not needed for STM32F4-Discovery board.
 /** Configure pins as 
         * Analog 
         * Input 
@@ -168,6 +176,7 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOH_CLK_ENABLE();
 
 }
+#endif
 
 /* USER CODE BEGIN 4 */
 
